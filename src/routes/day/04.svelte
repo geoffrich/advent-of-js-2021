@@ -1,6 +1,8 @@
 <script>
 	import { successTime, derivedTimes } from '$lib/stores/averageTime';
+	import reducedMotion from '$lib/stores/reducedMotion';
 	import { onMount } from 'svelte';
+	import { ConfettiExplosion } from 'svelte-confetti-explosion';
 
 	const keys = [
 		['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'DEL'],
@@ -81,6 +83,9 @@
 		<div>Speed: {$derivedTimes.recent}s</div>
 		<div>Average: {$derivedTimes.average}s</div>
 		{#if finished}
+			{#if !$reducedMotion}
+				<ConfettiExplosion />
+			{/if}
 			<div>Congratulations! <button on:click={restart}>Play again?</button></div>
 		{/if}
 	</div>
