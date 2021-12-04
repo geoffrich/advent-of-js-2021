@@ -20,7 +20,7 @@
 		selectRandomKey();
 	});
 
-	const visitedKeys = new Set();
+	let visitedKeys = new Set();
 
 	function selectRandomKey() {
 		if (visitedKeys.size === totalKeys) {
