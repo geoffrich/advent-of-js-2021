@@ -60,7 +60,12 @@
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		{#each keys as { className, path }, index}
-			<a href="#" on:click={() => playNote(index)} aria-label="Play note {index + 1}">
+			<a
+				href="#"
+				on:click={() => playNote(index)}
+				aria-label="Play note {index + 1}"
+				rel="external"
+			>
 				<path class={className} d={path} />
 			</a>
 		{/each}
