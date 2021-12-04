@@ -1,27 +1,39 @@
 <script>
+	import { successTime, derivedTimes } from '$lib/stores/averageTime';
+	import { onMount } from 'svelte';
+
 	const keys = [
 		['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'DEL'],
 		['TAB', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
 		['CAPS', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'", 'ENTER'],
 		['SHIFT', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', 'SHIFT']
 	];
+	const totalKeys = new Set(keys.flat()).size;
 
-	let randomRow = 0;
-	let randomCol = 0;
+	let randomRow = -1;
+	let randomCol = -1;
 	let lastKey = '';
-	let startTime;
-	let pressTime = 0;
+	let selectedKey;
+	let finished = false;
 
-	selectRandomKey();
+	onMount(() => {
+		selectRandomKey();
+	});
 
 	const visitedKeys = new Set();
 
-	$: selectedKey = keys[randomRow][randomCol];
-
 	function selectRandomKey() {
-		randomRow = randomIndex(keys);
-		randomCol = randomIndex(keys[randomRow]);
-		startTime = Date.now();
+		if (visitedKeys.size === totalKeys) {
+			finished = true;
+			randomRow = -1;
+			randomCol = -1;
+			return;
+		}
+		do {
+			randomRow = randomIndex(keys);
+			randomCol = randomIndex(keys[randomRow]);
+			selectedKey = keys[randomRow][randomCol];
+		} while (visitedKeys.has(selectedKey));
 	}
 
 	function randomIndex(arr) {
@@ -29,12 +41,14 @@
 	}
 
 	function handleKeyDown(e) {
-		const pressedKey = getNormalizedKey(e.key);
-		if (pressedKey === selectedKey.toLowerCase()) {
-			pressTime = Date.now() - startTime;
-			visitedKeys.add(selectedKey);
-			visitedKeys = visitedKeys;
-			selectRandomKey();
+		if (!finished) {
+			const pressedKey = getNormalizedKey(e.key);
+			if (pressedKey === selectedKey.toLowerCase()) {
+				$successTime = Date.now();
+				visitedKeys.add(selectedKey);
+				visitedKeys = visitedKeys;
+				selectRandomKey();
+			}
 		}
 		lastKey = e.key;
 	}
@@ -49,6 +63,14 @@
 				return key.toLowerCase();
 		}
 	}
+
+	function restart() {
+		successTime.reset();
+		finished = false;
+		visitedKeys.clear();
+		visitedKeys = visitedKeys;
+		selectRandomKey();
+	}
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
@@ -56,7 +78,11 @@
 <div class="root">
 	<div class="lastPressed">
 		<div>You pressed: {lastKey}</div>
-		<div>Speed: {(pressTime / 1000).toFixed(2)}s</div>
+		<div>Speed: {$derivedTimes.recent}s</div>
+		<div>Average: {$derivedTimes.average}s</div>
+		{#if finished}
+			<div>Congratulations! <button on:click={restart}>Play again?</button></div>
+		{/if}
 	</div>
 	<div class="keyboard">
 		{#each keys as row, rowIndex}
