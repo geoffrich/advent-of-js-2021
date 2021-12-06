@@ -37,7 +37,10 @@
 			<div class="total">{format(item.price * quantity)}</div>
 		</div>
 	</div>
-	<img src="/images/day2/{item.img}" alt="" />
+	<div class="cart-image">
+		<img src="/images/day2/{item.img}" alt="" />
+		<div aria-hidden="true" class="overlay">{quantity}</div>
+	</div>
 </div>
 
 <style>
@@ -45,24 +48,45 @@
 		display: grid;
 		grid-template-columns: auto 1fr;
 		grid-template-areas: 'img details';
+		column-gap: 1rem;
 	}
 
 	.details {
 		grid-area: details;
 	}
 
-	.item > img {
+	.cart-image {
 		max-width: 4rem;
 		grid-area: img;
+		transform: translateY(-0.5rem);
+		position: relative;
+		align-self: start;
+	}
+
+	.overlay {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+
+		color: white;
+		background: black;
+		height: 2rem;
+		width: 2rem;
+		border-radius: 50%;
+		text-align: center;
+		padding-top: 3px;
 	}
 
 	.name {
 		font-size: 18px;
+		line-height: 20px;
 	}
 
 	.price {
 		font-size: 1rem;
 		font-weight: 700;
+		margin-bottom: 1rem;
 	}
 
 	.total {
