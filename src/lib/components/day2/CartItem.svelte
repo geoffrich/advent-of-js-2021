@@ -113,8 +113,9 @@
 		color: white;
 		height: 2rem;
 		width: 2rem;
-		display: grid;
-		place-items: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		border: none;
 		border-radius: 50%;
 	}
