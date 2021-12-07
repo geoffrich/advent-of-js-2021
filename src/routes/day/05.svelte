@@ -1,25 +1,68 @@
+<script context="module">
+	export async function load({ fetch }) {
+		const randomArticles = await fetch(
+			'https://en.wikipedia.org/w/api.php?action=query&format=json&list=random&rnnamespace=0&rnlimit=6'
+		).then((r) => r.json());
+		const titles = randomArticles.query.random.map((x) => x.title);
+		return {
+			props: {
+				episodes: titles
+			}
+		};
+	}
+</script>
+
 <script>
-	const episodes = [
-		'Trailer',
-		'James Q Quick Origin Story',
-		'Amy Dutton Origin Story',
-		'Starting a New Development Project',
-		'How do you Start a New Design Project?',
-		'Freelancing (Part 1)'
-	];
+	export let episodes = [];
+
+	let selected = [];
+	let lastSelected = -1;
+
+	/** @param e {MouseEvent} */
+	function handleClick(e, selectedIndex) {
+		if (e.shiftKey && lastSelected !== -1) {
+			if (lastSelected < selectedIndex) {
+				for (let i = lastSelected; i <= selectedIndex; i++) {
+					selected.push(i);
+				}
+			} else {
+				for (let i = lastSelected; i >= selectedIndex; i--) {
+					selected.push(i);
+				}
+			}
+
+			selected = selected;
+		}
+	}
+
+	function handleChange(e, i) {
+		if (e.target.checked) {
+			lastSelected = i;
+		}
+	}
 </script>
 
 <div class="root">
 	<div class="grid">
 		<div class="episodes">
-			<p class="tag">Listen to all the Compressed.FM episodes</p>
+			<p class="tag">Listen to all the Wikipedia podcast episodes</p>
 			<ul>
 				{#each episodes as ep, i}
-					<li><label><input type="checkbox" /> {i + 1} || {ep}</label></li>
+					<li>
+						<label on:click={(e) => handleClick(e, i)}
+							><input
+								type="checkbox"
+								value={i}
+								bind:group={selected}
+								on:change={(e) => handleChange(e, i)}
+							/>
+							<span class="title">{i + 1} || {ep}</span></label
+						>
+					</li>
 				{/each}
 			</ul>
 		</div>
-		<img class="cover" src="/images/day5/podcast-cover.png" alt="Compressed FM" />
+		<img class="cover" src="https://picsum.photos/600/600" alt="Podcast cover" />
 	</div>
 </div>
 
@@ -101,8 +144,9 @@
 		height: var(--size);
 		width: var(--size);
 		margin-right: 1.5em;
-		border-radius: 0.75em;
+		border-radius: 0.5em;
 		outline-offset: 2px;
+		flex: 0 auto;
 	}
 
 	input[type='checkbox']::after {
@@ -116,6 +160,11 @@
 
 	input[type='checkbox']:checked::after {
 		background-image: url('/images/day5/checkbox--checked.svg');
+	}
+
+	input[type='checkbox']:checked + .title {
+		text-decoration: line-through;
+		opacity: 0.8;
 	}
 
 	label {
@@ -135,7 +184,7 @@
 	.tag {
 		font-size: 1.1em;
 		text-transform: uppercase;
-		color: #a7a7a7;
+		color: #646464;
 		margin-bottom: 2.5em;
 	}
 
