@@ -45,7 +45,7 @@
 <div class="root">
 	<div class="grid">
 		<div class="episodes">
-			<p class="tag">Listen to all the Wikipedia podcast episodes</p>
+			<h1 class="tag">Listen to all the Wikipedia podcast episodes</h1>
 			<ul>
 				{#each episodes as ep, i}
 					<li>
