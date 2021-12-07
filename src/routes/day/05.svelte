@@ -141,6 +141,7 @@
 
 	input[type='checkbox'] {
 		appearance: none;
+		-webkit-appearance: none;
 		height: var(--size);
 		width: var(--size);
 		margin-right: 1.5em;
