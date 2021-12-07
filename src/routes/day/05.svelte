@@ -142,8 +142,10 @@
 	input[type='checkbox'] {
 		appearance: none;
 		-webkit-appearance: none;
+		background-color: #fff;
 		height: var(--size);
 		width: var(--size);
+		margin: 0;
 		margin-right: 1.5em;
 		border-radius: 0.5em;
 		outline-offset: 2px;
