@@ -10,6 +10,7 @@
 		<li><a href="/day/02">Day 2 (WIP)</a></li>
 		<li><a href="/day/03">Day 3</a></li>
 		<li><a href="/day/04">Day 4</a></li>
+		<li><a href="/day/05">Day 5 (WIP)</a></li>
 	</ul>
 
 	<p>
