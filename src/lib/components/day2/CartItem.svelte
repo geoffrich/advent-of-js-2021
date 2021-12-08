@@ -127,6 +127,10 @@
 		align-items: center;
 	}
 
+	button img {
+		display: inline;
+	}
+
 	button:last-child {
 		transform: rotateY(180deg);
 	}
