@@ -30,9 +30,13 @@
 		<div class="price">{format(item.price)}</div>
 		<div class="adjust">
 			<div class="quantity">
-				<button on:click={dec}><img src="/images/day2/chevron.svg" alt="decrease" /></button>
+				<button on:click={dec}
+					><span><img src="/images/day2/chevron.svg" alt="decrease" /></span></button
+				>
 				<span>{quantity}</span>
-				<button on:click={inc}><img src="/images/day2/chevron.svg" alt="increase" /></button>
+				<button on:click={inc}
+					><span><img src="/images/day2/chevron.svg" alt="increase" /></span></button
+				>
 			</div>
 			<div class="total">{format(item.price * quantity)}</div>
 		</div>
@@ -113,11 +117,14 @@
 		color: white;
 		height: 2rem;
 		width: 2rem;
+		border: none;
+		border-radius: 50%;
+	}
+
+	button span {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border: none;
-		border-radius: 50%;
 	}
 
 	button:last-child {
